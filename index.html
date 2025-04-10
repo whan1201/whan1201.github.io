@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Journey</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    .page {
+      display: none;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #page1 {
+      display: flex;
+      background-color: #f578b5;
+      color: white;
+    }
+    #page2 {
+      display: flex;
+      background-color: #ffccdd;
+      color: black;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-image: url('IMG_8516.png');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    #page3 {
+      display: flex;
+      background: #ffeef5;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    #yesBtn {
+      background: #4cd964;
+      color: white;
+    }
+    #noBtn {
+      background: #ff3b30;
+      color: white;
+      position: absolute;
+      transition: top 0.4s ease, left 0.4s ease;
+      max-width: 100px;
+    }
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 10px;
+      justify-content: center;
+      background-color: rgba(255,255,255,0.8);
+      padding: 20px;
+      border-radius: 15px;
+      z-index: 1;
+    }
+    .keypad button {
+      font-size: 1.5em;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #f578b5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.1s;
+    }
+    .keypad button:hover {
+      box-shadow: 0 0 10px rgba(245, 120, 181, 0.8);
+    }
+    .keypad button:active {
+      transform: scale(0.95);
+    }
+    #pinDisplay {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      border-radius: 10px;
+      letter-spacing: 10px;
+    }
+    .envelope-wrapper {
+      position: relative;
+      width: 90vw;
+      max-width: 500px;
+      height: auto;
+    }
+    .envelope {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      background-color: #ffccdd;
+      border-radius: 10px;
+      transition: transform 0.5s;
+    }
+    .envelope.open {
+      transform: translateY(-50px);
+    }
+    .letter {
+      position: absolute;
+      width: 90%;
+      height: 80%;
+      background-color: white;
+      top: 10%;
+      left: 5%;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      opacity: 0;
+      transition: opacity 0.5s;
+      padding: 20px;
+      font-size: 1.2em;
+    }
+    .envelope.open + .letter {
+      opacity: 1;
+    }
+    .hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .heart {
+      position: absolute;
+      bottom: 0;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      clip-path: path('M10 30s-10-10-10-15a10 10 0 0 1 20 0c0 5-10 15-10 15z');
+      animation: float 4s infinite;
+    }
+    .heart:nth-child(1) {
+      left: 20%;
+      animation-delay: 0s;
+    }
+    .heart:nth-child(2) {
+      left: 50%;
+      animation-delay: 1s;
+    }
+    .heart:nth-child(3) {
+      left: 80%;
+      animation-delay: 2s;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page1" class="page">
+  <h2>เธอรักเค้ามั้ยยย</h2>
+  <div>
+    <button id="yesBtn" onclick="goToPage(2)">รัก</button>
+    <button id="noBtn">ไม่</button>
+  </div>
+</div>
+
+<div id="page2" class="page">
+  <p style="font-size: 1.2em; background-color: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 10px;">จำได้ไหมมมมมมมมม</p>
+  <div id="pinDisplay">○ ○ ○ ○</div>
+  <div class="keypad">
+    <button onclick="enterPin(1)">1</button>
+    <button onclick="enterPin(2)">2</button>
+    <button onclick="enterPin(3)">3</button>
+    <button onclick="enterPin(4)">4</button>
+    <button onclick="enterPin(5)">5</button>
+    <button onclick="enterPin(6)">6</button>
+    <button onclick="enterPin(7)">7</button>
+    <button onclick="enterPin(8)">8</button>
+    <button onclick="enterPin(9)">9</button>
+    <button onclick="clearPin()">ลบ</button>
+    <button onclick="enterPin(0)">0</button>
+    <button onclick="checkPin()">ตกลง</button>
+  </div>
+</div>
+
+<div id="page3" class="page">
+  <div class="envelope-wrapper">
+    <div class="envelope" id="envelope"></div>
+    <div class="letter">
+      <p>บี๋เก่งจังงงงงง สุขสันต์วันครบรอบ 1 เดือนนะคับบิบี๋ของเค้า</p>
+      <p>ขอบคุณสำหรับทุก ๆ อย่างเลย เธอน่ารักกับเค้ามาก</p>
+      <p>คุยกับเธอเค้าเป็นตัวเอง เค้ามีความสุขที่สุด อาจจะมึนบ้าง ด่าไปบ้าง เค้าขอโทษ แต่วันหลังเอาใหม่</p>
+      <p>แต่ถึงยังไงเค้าไม่เคยรักบี๋น้อยลงเลยนะ เค้ารักโชที่สุดเลยนะอ้วนนนน</p>
+    </div>
+    <div class="hearts">
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const pages = {
+    1: document.getElementById('page1'),
+    2: document.getElementById('page2'),
+    3: document.getElementById('page3')
+  };
+
+  function goToPage(num) {
+    Object.values(pages).forEach(p => p.style.display = 'none');
+    pages[num].style.display = 'flex';
+  }
+
+  const noBtn = document.getElementById('noBtn');
+  noBtn.addEventListener('mouseover', () => {
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    const maxX = window.innerWidth - btnWidth;
+    const maxY = window.innerHeight - btnHeight;
+    let x = Math.random() * maxX;
+    let y = Math.random() * maxY;
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+  });
+
+  const correctPin = '1103';
+  let inputPin = '';
+
+  function updatePinDisplay() {
+    const display = document.getElementById('pinDisplay');
+    let dots = '';
+    for (let i = 0; i < 4; i++) {
+      dots += i < inputPin.length ? '● ' : '○ ';
+    }
+    display.textContent = dots.trim();
+  }
+
+  function enterPin(num) {
+    if (inputPin.length < 4) {
+      inputPin += num;
+      updatePinDisplay();
+    }
+  }
+
+  function clearPin() {
+    inputPin = '';
+    updatePinDisplay();
+  }
+
+  function checkPin() {
+    if (inputPin === correctPin) {
+      goToPage(3);
+      setTimeout(() => {
+        document.getElementById('envelope').classList.add('open');
+      }, 500);
+    } else {
+      alert('ผิดอีกรอบ เต้นง้อแฟนส่งมานะ');
+      clearPin();
+    }
+  }
+</script>
+
+</body>
+</html>
